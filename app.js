@@ -3,16 +3,27 @@ var bodyParser = require("body-parser"),
     express = require("express"),
     app = express();
 
+const PORT = 8080;
+const HOST = '0.0.0.0';
+const MONGO_URI = "mongodb://mongo:27017/restful_blog";
+
 // APP CONFIG
-mongoose.connect("mongodb://mongo:27017/restful_blog");
+mongoose
+    .connect(MONGO_URI, {
+        useNewUrlParser: true
+    })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => {
+        console.log(err.stack);
+        process.exit(1);
+    });
+
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true,
+    useNewUrlParser: true
 }));
-
-const PORT = 8080;
-const HOST = '0.0.0.0';
 
 // MONGOOSE CONFIG
 var blogSchema = new mongoose.Schema({
@@ -30,7 +41,7 @@ Blog.create({
     body: "Hello!"
 });
 
-// ROUTES 
+// ROUTES
 
 app.get("/", (req, res)=> {
     res.redirect("/blogs");
