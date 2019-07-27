@@ -30,29 +30,45 @@ var blogSchema = new mongoose.Schema({
     title: String,
     image: String,
     body: String,
-    created: { type: Date, default: Date.now }
+    created: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 var Blog = mongoose.model("Blog", blogSchema);
 
-Blog.create({
-    title: "Test Blog",
-    image: "https://cdn1-www.dogtime.com/assets/uploads/2016/04/small-apartment-dog-breeds-23.jpg",
-    body: "Hello!"
-});
-
 // ROUTES
 
-app.get("/", (req, res)=> {
+app.get("/", (req, res) => {
     res.redirect("/blogs");
 });
 
-app.get("/blogs", (req, res)=> {
-    Blog.find({}, (err, blogs)=>{
-        if(err){
+// INDEX ROUTE
+app.get("/blogs", (req, res) => {
+    Blog.find({}, (err, blogs) => {
+        if (err) {
             console.log(err)
         } else {
-            res.render("index", {blogs: blogs})
+            res.render("index", {
+                blogs: blogs
+            })
+        }
+    });
+});
+
+// NEW ROUTE
+app.get("/blogs/new", (req, res) => {
+    res.render("new");
+});
+
+// CREATE ROUTE
+app.post("/blogs", (req, res) => {
+    Blog.create(req.body.blog, (err, newBLog) => {
+        if (err) {
+            res.render("new")
+        } else {
+            res.redirect("/blogs")
         }
     });
 });
