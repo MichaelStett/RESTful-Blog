@@ -14,9 +14,11 @@
                 <p><%- blog.body %></p>
                 <%# - is used so it can be styled %>
             </div>
+            <a href="/blogs/<%= blog._id %>/edit" class="ui orange basic button">Edit</a>
+            <form action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
+                <button class="ui red basic button">Delete</button>
+            </form>
         </div>
-
-
     </div>
 </div>
 
